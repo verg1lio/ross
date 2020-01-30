@@ -306,3 +306,30 @@ def test_match_gyroscopic_matrix(tap2, tim2):
     G_tap = tap2.G()
     G_tim = tim2.G()
     assert_almost_equal(G_tap, G_tim, decimal=5)
+
+
+@pytest.fixture
+def tap_tim_6dof_no_rotary_inertia():
+    #  Timoshenko element
+    L = 0.4
+    i_d_l = 0.0
+    i_d_r = 0.0
+    o_d_l = 0.25
+    o_d_r = 0.10
+
+    return ShaftElement(
+        L,
+        i_d_l,
+        o_d_l,
+        i_d_r,
+        o_d_r,
+        steel,
+        shear_effects=True,
+        rotary_inertia=False,
+        n=3,
+    )
+
+
+def test_mass_matrix_dof6(tap_tim_6dof_no_rotary_inertia):
+    Mt_exp = np.array([[0]])
+    assert_almost_equal(tap_tim_6dof_no_rotary_inertia.M(), Mt_exp, decimal=5)

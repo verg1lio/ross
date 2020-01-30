@@ -1192,3 +1192,141 @@ class ShaftElement(Element):
 
         return elements
 
+
+class ShaftElementDOF6(Element):
+    r"""A shaft element.
+    This class will create a shaft element that may take into
+    account shear, rotary inertia an gyroscopic effects.
+    The matrices will be defined considering the following local
+    coordinate vector:
+
+    .. math::
+
+        [x_0, y_0, \alpha_0, \beta_0, x_1, y_1, \alpha_1, \beta_1]^T
+    Where :math:`\alpha_0` and :math:`\alpha_1` are the bending on the yz plane
+    and :math:`\beta_0` and :math:`\beta_1` are the bending on the xz plane.
+
+    Parameters
+    ----------
+    L : float
+        Element length.
+    idl : float
+        Inner diameter of the element at the left position..
+    odl : float
+        Outer diameter of the element at the left position.
+    idr : float, optional
+        Inner diameter of the element at the right position
+        Default is equal to idl value (cylindrical element)
+    odr : float, optional
+        Outer diameter of the element at the right position.
+        Default is equal to odl value (cylindrical element)
+    material : ross.material
+        Shaft material.
+    n : int, optional
+        Element number (coincident with it's first node).
+        If not given, it will be set when the rotor is assembled
+        according to the element's position in the list supplied to
+        the rotor constructor.
+    axial_force : float, optional
+        Axial force.
+    torque : float, optional
+        Torque.
+    shear_effects : bool, optional
+        Determine if shear effects are taken into account.
+        Default is True.
+    rotary_inertia : bool, optional
+        Determine if rotary_inertia effects are taken into account.
+        Default is True.
+    gyroscopic : bool, optional
+        Determine if gyroscopic effects are taken into account.
+        Default is True.
+    shear_method_calc : string, optional
+        Determines which shear calculation method the user will adopt
+        Default is 'cowper'
+    tag : str, optional
+        Element tag.
+        Default is None.
+
+    Returns
+    -------
+    A shaft element
+
+    Attributes
+    ----------
+    Poisson : float
+        Poisson coefficient for the element.
+    A : float
+        Element section area at half length.
+    A_l : float
+        Element section area at left end.
+    A_r : float
+        Element section area at right end.
+    beam_cg : float
+        Element center of gravity local position.
+    axial_cg_pos : float
+        Element center of gravity global position.
+        This should be used only after the rotor is built.
+        Default is None.
+    Ie : float
+        Ie is the second moment of area of the cross section about
+        the neutral plane.
+    phi : float
+        Constant that is used according to :cite:`friswell2010dynamics` to
+        consider rotary inertia and shear effects. If these are not considered
+        :math:`\phi=0`.
+    kappa : float
+        Shear coefficient for the element.
+
+    References
+    ----------
+
+    .. bibliography:: ../../../docs/refs.bib
+
+    Examples
+    --------
+    >>> from ross.materials import steel
+    >>> Euler_Bernoulli_Element = ShaftElement(
+    ...                         material=steel, L=0.5, idl=0.05, odl=0.1,
+    ...                         idr=0.05, odr=0.15,
+    ...                         rotary_inertia=False,
+    ...                         shear_effects=False)
+    >>> Euler_Bernoulli_Element.phi
+    0
+    >>> Timoshenko_Element = ShaftElement(
+    ...                         material=steel, L=0.5, idl=0.05, odl=0.1,
+    ...                         rotary_inertia=True,
+    ...                         shear_effects=True)
+    >>> Timoshenko_Element.phi
+    0.1571268472906404
+    """
+
+    def __init__(
+            self,
+            L,
+            idl,
+            odl,
+            idr=None,
+            odr=None,
+            material=None,
+            n=None,
+            axial_force=0,
+            torque=0,
+            shear_effects=True,
+            rotary_inertia=True,
+            gyroscopic=True,
+            shear_method_calc="cowper",
+            tag=None,
+    ):
+        pass
+
+    def M(self):
+        pass
+
+    def K(self):
+        pass
+
+    def C(self):
+        pass
+
+    def G(self):
+        pass
