@@ -12,7 +12,7 @@ from ross.element import Element
 from ross.materials import Material, steel
 from ross.utils import read_table_file
 
-__all__ = ["ShaftElement"]
+__all__ = ["ShaftElement", "ShaftElementDOF6"]
 bokeh_colors = bp.RdGy[11]
 
 

@@ -5,7 +5,7 @@ import pytest
 from numpy.testing import assert_almost_equal, assert_allclose
 
 from ross.materials import steel
-from ross.shaft_element import ShaftElement
+from ross.shaft_element import ShaftElement, ShaftElementDOF6
 
 test_dir = os.path.dirname(__file__)
 
@@ -317,7 +317,7 @@ def tap_tim_6dof_no_rotary_inertia():
     o_d_l = 0.25
     o_d_r = 0.10
 
-    return ShaftElement(
+    return ShaftElementDOF6(
         L,
         i_d_l,
         o_d_l,
