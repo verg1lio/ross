@@ -212,7 +212,7 @@ class ModalResults:
             It will be returned only if return_T is True.
         """
         # get vector of interest based on freqs
-        vector = self.evectors[4 * node : 4 * node + 2, w]
+        vector = self.evectors[self.number_dof * node : self.number_dof * node + (self.number_dof)/2, w]
         # get translation sdofs for specified node for each mode
         u = vector[0]
         v = vector[1]
@@ -394,8 +394,8 @@ class ModalResults:
         nodes_pos = self.nodes_pos
         shaft_elements_length = self.shaft_elements_length
 
-        modex = evec[0::4]
-        modey = evec[1::4]
+        modex = evec[0::self.number_dof]
+        modey = evec[1::self.number_dof]
 
         xmax, ixmax = max(abs(modex)), np.argmax(abs(modex))
         ymax, iymax = max(abs(modey)), np.argmax(abs(modey))
@@ -445,8 +445,8 @@ class ModalResults:
             Nx = np.hstack((N1, Le * N2, N3, Le * N4))
             Ny = np.hstack((N1, -Le * N2, N3, -Le * N4))
 
-            xx = [4 * n, 4 * n + 3, 4 * n + 4, 4 * n + 7]
-            yy = [4 * n + 1, 4 * n + 2, 4 * n + 5, 4 * n + 6]
+            xx = [self.number_dof * n, self.number_dof * n + 3, self.number_dof * n + 4, self.number_dof * n + 7]
+            yy = [self.number_dof * n + 1, self.number_dof * n + 2, self.number_dof * n + 5, self.number_dof * n + 6]
 
             pos0 = nn * n
             pos1 = nn * (n + 1)
