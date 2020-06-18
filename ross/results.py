@@ -412,10 +412,15 @@ class ModalResults:
 
         modex = evec[0::self.number_dof]
         modey = evec[1::self.number_dof]
+        if self.number_dof == 6: # in case the model has 6 DoF per node
+            modez = evec[2::self.number_dof]
 
         xmax, ixmax = max(abs(modex)), np.argmax(abs(modex))
         ymax, iymax = max(abs(modey)), np.argmax(abs(modey))
+        if self.number_dof == 6: # in case the model has 6 DoF per node
+            zmax, izmax = max(abs(modez)), np.argmax(abs(modez))
 
+        # this normalization is left between x and y directions only
         if ymax > 0.4 * xmax:
             evec /= modey[iymax]
         else:
@@ -437,7 +442,11 @@ class ModalResults:
             x_circles[:, node] = np.real(x)
             y = modey[node] * circle
             y_circles[:, node] = np.real(y)
-            z_circles_pos[:, node] = nodes_pos[node]
+            if self.number_dof == 6: # in case the model has 6 DoF per node
+                z = modey[node] * circle
+                z_circles_pos[:, node] = np.real(z)
+            else:
+                z_circles_pos[:, node] = nodes_pos[node]
 
         # plot lines
         nn = 21
