@@ -469,6 +469,8 @@ class ModalResults:
             node_pos = nodes_pos[n]
             Nx = np.hstack((N1, Le * N2, N3, Le * N4))
             Ny = np.hstack((N1, -Le * N2, N3, -Le * N4))
+            if self.number_dof == 6: # in case the model has 6 DoF per node
+                # Nz = (proper reconstruction here) i believe it might be all zero + z mode shapes
 
             if self.number_dof == 6: # in case the model has 6 DoF per node
                 xx = [self.number_dof * n, self.number_dof * n + 4, self.number_dof * n + 6, self.number_dof * n + 10]
