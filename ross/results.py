@@ -213,22 +213,38 @@ class ModalResults:
         """
         # get vector of interest based on freqs
         vector = self.evectors[self.number_dof * node : self.number_dof * node + (self.number_dof)/2, w]
+
         # get translation sdofs for specified node for each mode
         u = vector[0]
         v = vector[1]
+        if self.number_dof == 6: # in case the model has 6 DoF per node
+            w = vector[2]
+
         ru = np.absolute(u)
         rv = np.absolute(v)
+        if self.number_dof == 6: # in case the model has 6 DoF per node
+            rw = np.absolute(w)
 
         nu = np.angle(u)
         nv = np.angle(v)
+        if self.number_dof == 6: # in case the model has 6 DoF per node
+            nw = np.angle(w)
+
         # fmt: off
         T = np.array([[ru * np.cos(nu), -ru * np.sin(nu)],
                       [rv * np.cos(nv), -rv * np.sin(nv)]])
+        if self.number_dof == 6: # in case the model has 6 DoF per node
+            T = np.array([[ru * np.cos(nu), -ru * np.sin(nu)],
+                          [rv * np.cos(nv), -rv * np.sin(nv)],
+                          [rw * np.cos(nw), -rw * np.sin(nw)]])
         # fmt: on
         H = T @ T.T
 
         if return_T:
-            Tdic = {"ru": ru, "rv": rv, "nu": nu, "nv": nv}
+            if self.number_dof == 6: # in case the model has 6 DoF per node
+                Tdic = {"ru": ru, "rv": rv, "rw": rw, "nu": nu, "nv": nv, "nw": nw}
+            else:
+                Tdic = {"ru": ru, "rv": rv, "nu": nu, "nv": nv}
             return H, Tdic
 
         return H
