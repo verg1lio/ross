@@ -443,7 +443,7 @@ class ModalResults:
             y = modey[node] * circle
             y_circles[:, node] = np.real(y)
             if self.number_dof == 6: # in case the model has 6 DoF per node
-                z = modey[node] * circle
+                z = modez[node] * circle
                 z_circles_pos[:, node] = np.real(z)
             else:
                 z_circles_pos[:, node] = nodes_pos[node]
@@ -470,15 +470,25 @@ class ModalResults:
             Nx = np.hstack((N1, Le * N2, N3, Le * N4))
             Ny = np.hstack((N1, -Le * N2, N3, -Le * N4))
 
-            xx = [self.number_dof * n, self.number_dof * n + 3, self.number_dof * n + 4, self.number_dof * n + 7]
-            yy = [self.number_dof * n + 1, self.number_dof * n + 2, self.number_dof * n + 5, self.number_dof * n + 6]
+            if self.number_dof == 6: # in case the model has 6 DoF per node
+                xx = [self.number_dof * n, self.number_dof * n + 4, self.number_dof * n + 6, self.number_dof * n + 10]
+                yy = [self.number_dof * n + 1, self.number_dof * n + 3, self.number_dof * n + 7, self.number_dof * n + 9]
+                zz = [self.number_dof * n + 2, self.number_dof * n + 5, self.number_dof * n + 8, self.number_dof * n + 11]
+            else:
+                xx = [self.number_dof * n, self.number_dof * n + 3, self.number_dof * n + 4, self.number_dof * n + 7]
+                yy = [self.number_dof * n + 1, self.number_dof * n + 2, self.number_dof * n + 5, self.number_dof * n + 6]
 
             pos0 = nn * n
             pos1 = nn * (n + 1)
 
             xn[pos0:pos1] = Nx @ evec[xx].real
             yn[pos0:pos1] = Ny @ evec[yy].real
-            zn[pos0:pos1] = (node_pos * onn + Le * zeta).reshape(nn)
+            # still has to be detailed. this "Z" generalization made here is unfinished as of yet.
+            if self.number_dof == 6: # in case the model has 6 DoF per node
+                #zn[pos0:pos1] = Nz @ evec[zz].real
+                zn[pos0:pos1] = (node_pos * onn + Le * zeta).reshape(nn)
+            else:
+                zn[pos0:pos1] = (node_pos * onn + Le * zeta).reshape(nn)
 
         return xn, yn, zn, x_circles, y_circles, z_circles_pos, nn
 
